@@ -22,6 +22,12 @@ export class PaginateComponent implements OnInit {
 
   ngOnInit() {
     this.init();
+
+    // Observable qui va recevoir le journal ...
+    this.aS.sendCurrentNumberPage.subscribe(numberPage => {
+      this.currentPage = numberPage;
+      this.init(this.currentPage);
+    });
   }
 
   /**
@@ -41,7 +47,7 @@ export class PaginateComponent implements OnInit {
   selectedPage(page: number) {
     this.currentPage = page;
     this.setPaginate.emit(this.paginate(page));
-
+    this.aS.currentPage(this.currentPage); // mettre à jour les autres components paginate
   }
 
   next() {
@@ -51,6 +57,7 @@ export class PaginateComponent implements OnInit {
       this.currentPage++;
     }
     this.setPaginate.emit(this.paginate(this.currentPage)); // émettre la page courante
+    this.aS.currentPage(this.currentPage); // mettre à jour les autres components paginate
   }
 
   previous() {
@@ -60,7 +67,7 @@ export class PaginateComponent implements OnInit {
       this.currentPage--;
     }
     this.setPaginate.emit(this.paginate(this.currentPage));
-
+    this.aS.currentPage(this.currentPage); // mettre à jour les autres components paginate
   }
 
   paginate(page: number): { start: number, end: number } {

@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Album, List } from './album';
 import { ALBUM_LISTS, ALBUMS } from './mock-albums';
 import { environment } from '../environments/environment';
+import { Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -11,6 +12,8 @@ export class AlbumService {
 
   private _albums: Album[] = ALBUMS; // _ convention private et protected
   private _albumList: List[] = ALBUM_LISTS;
+
+  sendCurrentNumberPage = new Subject<number>();
 
   constructor() { }
 
@@ -61,6 +64,11 @@ export class AlbumService {
       throw "Attention la pagination n'est pas définie" ;
 
     return environment.numberPage ;
+  }
+
+  currentPage(numberPage: number) {
+    // Observer notifie une information page ici numérique envoit le journal ...
+    return this.sendCurrentNumberPage.next(numberPage);
   }
 
 }
