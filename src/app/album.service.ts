@@ -14,6 +14,7 @@ export class AlbumService {
   private _albumList: List[] = ALBUM_LISTS;
 
   sendCurrentNumberPage = new Subject<number>();
+  subjectAlbum = new Subject<Album>();
 
   constructor() { }
 
@@ -37,7 +38,7 @@ export class AlbumService {
 
   count(): number {
 
-    return this._albums? this._albums.length : 0;
+    return this._albums ? this._albums.length : 0;
   }
 
   paginate(start: number, end: number): Album[] {
@@ -59,11 +60,11 @@ export class AlbumService {
     }
   }
 
-  paginateNumberPage():number{
-    if ( typeof environment.numberPage == 'undefined' )
-      throw "Attention la pagination n'est pas définie" ;
+  paginateNumberPage(): number {
+    if (typeof environment.numberPage == 'undefined')
+      throw "Attention la pagination n'est pas définie";
 
-    return environment.numberPage ;
+    return environment.numberPage;
   }
 
   currentPage(numberPage: number) {
@@ -71,4 +72,7 @@ export class AlbumService {
     return this.sendCurrentNumberPage.next(numberPage);
   }
 
+  switchOn(album: Album) {
+    
+  }
 }
