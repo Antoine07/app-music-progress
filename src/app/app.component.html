@@ -17,13 +17,19 @@
                     </a>
                 </li>
             </ul>
-            <ul>
-                <li>{{timer}}</li>
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <button type="button" class="btn-sm btn-outline-secondary">{{timer}}</button>
+                    <button [disabled]="isStop==true" type="button" class="btn btn-primary btn-sm" (click)="stopTimer()">Stop
+                        timer</button>
+                    <button [disabled]="isStop==false" type="button" class="btn btn-primary btn-sm" (click)="restartTimer()">Restart
+                        timer</button>
+                </li>
             </ul>
-            <button id="btn-click" type="button" class="btn btn-primary">Primary</button>
         </div>
     </nav>
     <!-- place de l'audio player déclenché depuis le component AlbumDetailsComponent -->
+    <app-audio-player></app-audio-player>
     <!-- 
     à la place du sélecteur des albums on mettra maintenant le chargement des components
     -->

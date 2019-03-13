@@ -32,6 +32,8 @@ export class AlbumsComponent implements OnInit {
 
   playParent($event){
     this.status = $event.id; // identifiant unique
+
+    this.ablumService.switchOn($event);
   }
 
   search($event) {

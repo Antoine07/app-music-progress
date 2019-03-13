@@ -15,6 +15,7 @@ export class AlbumService {
 
   sendCurrentNumberPage = new Subject<number>();
   subjectAlbum = new Subject<Album>();
+  destroy$: Subject<boolean> = new Subject<boolean>();
 
   constructor() { }
 
@@ -73,6 +74,12 @@ export class AlbumService {
   }
 
   switchOn(album: Album) {
-    
+    album.status = 'on';
+    this.subjectAlbum.next(album); // Observer push une donnée
+  }
+
+  switchOff(album) {
+    album.status = 'off';
+    this.subjectAlbum.unsubscribe();
   }
 }
