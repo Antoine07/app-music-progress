@@ -21,27 +21,31 @@ export class PaginateComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.init();
+    this.aS.count().subscribe(
+      total => {
+        this.init(total, 1);
+      }
+    );
 
     // Observable qui va recevoir le journal ...
     this.aS.sendCurrentNumberPage.subscribe(numberPage => {
-      this.currentPage = numberPage;
-      this.init(this.currentPage);
+      this.init(this.total, numberPage)
     });
   }
 
   /**
-   *  init paginate
-   * @param page 
-   */
-  init(page : number = 1) {
-      this.total = this.aS.count();
-      this.numberPages = Math.ceil(this.total / this.perPage);
-      this.currentPage = page;
-      this.pages = [];
-      for (let i = 1; i < this.numberPages + 1; i++) {
-        this.pages.push(i);
-      }
+ * init : définir les paramètres de la pagination
+ * 
+ * @param num 
+ */
+  init(total: number, page: number): void {
+    this.total = total;
+    this.numberPages = Math.ceil(total / this.perPage);
+    this.currentPage = page;
+    this.pages = [];
+    for (let i = 1; i < this.numberPages + 1; i++) {
+      this.pages.push(i);
+    }
   }
 
   selectedPage(page: number) {

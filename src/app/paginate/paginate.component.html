@@ -6,8 +6,13 @@
     <li [class.active]="currentPage==page" *ngFor="let page of pages" class="page-item">
       <a (click)="selectedPage(page)" class="page-link">{{ page }}</a>
     </li>
-    <li [ngClass]="{'disabled' : currentPage == numberPages}"  class="page-item">
+    <li [ngClass]="{'disabled' : currentPage == numberPages}" class="page-item">
       <a (click)="next()" class="page-link">Next</a>
     </li>
+  </ul>
+</nav>
+<nav>
+  <ul class="pagination">
+    <li class="page-item">{{ currentPage}}/{{ total }}</li>
   </ul>
 </nav>

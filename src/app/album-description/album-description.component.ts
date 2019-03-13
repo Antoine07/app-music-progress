@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { AlbumService } from '../album.service';
 import { Album } from '../album';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-album-description',
@@ -10,8 +11,8 @@ import { Album } from '../album';
 })
 export class AlbumDescriptionComponent implements OnInit {
 
-  album : Album ;
-
+  album : Album;
+  
   constructor(
     private route: ActivatedRoute, 
     private aS: AlbumService
@@ -19,7 +20,9 @@ export class AlbumDescriptionComponent implements OnInit {
 
   ngOnInit() {
     const id = this.route.snapshot.paramMap.get('id');
-    this.album = this.aS.getAlbum(id);
+    this.aS.getAlbum(id).subscribe(
+      album => this.album = album
+    );
   }
 
 }

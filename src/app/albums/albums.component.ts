@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Album } from '../album';
 import { ALBUMS } from '../mock-albums';
 import { AlbumService } from '../album.service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-albums',
@@ -11,26 +12,28 @@ import { AlbumService } from '../album.service';
 export class AlbumsComponent implements OnInit {
 
   titlePage: string = "Page princiaple Albums Music";
-  albums: Album[] = ALBUMS;
-  selectedAlbum : Album;
-  pos : number;
+  albums: Observable<Album[]>;
+  // albums : Observable<Album[]> ; // méthode async dans le template
+  selectedAlbum: Album;
+  pos: number;
   status: string = null; // pour gérer l'affichage des caractères [play] 
 
-  constructor(private ablumService: AlbumService) {}
+  constructor(private ablumService: AlbumService) { }
 
   ngOnInit() {
-    this.albums = this.ablumService.paginate(
-      0,
-      this.ablumService.paginateNumberPage()
-      );
+    // récupérer les albums depuis firebase sans la pagination !! à l'aide du service et les afficher dans le template
+    // this.ablumService.getAlbums((a, b) => a < b).subscribe(
+    //   albums => this.albums = albums
+    // );
 
+    this.albums = this.ablumService.paginate(0, 5); // async dans le template pour subscription
   }
 
   onSelect(album: Album) {
     this.selectedAlbum = album;
   }
 
-  playParent($event){
+  playParent($event) {
     this.status = $event.id; // identifiant unique
 
     this.ablumService.switchOn($event);

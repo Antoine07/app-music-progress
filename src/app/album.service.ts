@@ -3,7 +3,17 @@ import { Injectable } from '@angular/core';
 import { Album, List } from './album';
 import { ALBUM_LISTS, ALBUMS } from './mock-albums';
 import { environment } from '../environments/environment';
-import { Subject } from 'rxjs';
+import { Subject, Observable } from 'rxjs';
+// HttpClient <=> un service 
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { map } from 'rxjs/operators';
+
+// options pour la requête
+const httpOptions = {
+  headers: new HttpHeaders({
+    'Content-Type': 'application/json',
+  })
+};
 
 @Injectable({
   providedIn: 'root'
@@ -13,22 +23,35 @@ export class AlbumService {
   private _albums: Album[] = ALBUMS; // _ convention private et protected
   private _albumList: List[] = ALBUM_LISTS;
 
+  // url de la base de données
+  private albumsUrl = 'https://music-progress-8303e.firebaseio.com';
+
+
   sendCurrentNumberPage = new Subject<number>();
   subjectAlbum = new Subject<Album>();
   destroy$: Subject<boolean> = new Subject<boolean>();
 
-  constructor() { }
-
-  getAlbums(): Album[] {
-
-    return this._albums.sort(
-      (a, b) => { return b.duration - a.duration }
-    );
+  // injecte le service HttpClient d'Angular
+  constructor(private http: HttpClient) {
+    // Observable HttpClient c'est un Observable, il se désabonne tout seul une fois les données récupérées
+    // this.http.get<Album[]>(this.albumsUrl + '/albums.json').subscribe(
+    //   albums => console.log(albums)
+    // );
   }
 
-  getAlbum(id: string): Album {
+  getAlbums(compare = (a, b) => a > b): Observable<Album[]> {
 
-    return this._albums.find(album => album.id === id);
+    // aucune souscription elle se fera dans les components Albums, ...
+    return this.http.get<Album[]>(this.albumsUrl + '/albums.json').pipe(
+      map(albums => albums.sort((a, b) => compare(a.duration, b.duration) ? -1 : 1)),
+    );
+
+    // En utilisant un opérateur ordonner les albums par durée décroissante 
+  }
+
+  getAlbum(id: string): Observable<Album> {
+
+    return this.http.get<Album>(this.albumsUrl + `/albums/${id}/.json`, httpOptions);
   }
 
   // recherche d'une référence dans la liste
@@ -37,17 +60,17 @@ export class AlbumService {
     return this._albumList.find(list => list.id === id);
   }
 
-  count(): number {
+  count(): Observable<number> {
 
-    return this._albums ? this._albums.length : 0;
+    return this.http.get<number>(this.albumsUrl + '/count.json', httpOptions);
   }
 
-  paginate(start: number, end: number): Album[] {
+  paginate(start: number, end: number, compare = (a, b) => a > b): Observable<Album[]> {
 
-    // utilisez la méthode slice pour la pagination
-    return this._albums.sort(
-      (a, b) => { return b.duration - a.duration }
-    ).slice(start, end);
+    return this.http.get<Album[]>(this.albumsUrl + '/albums.json').pipe(
+      map(albums => albums.sort((a, b) => compare(a.duration, b.duration) ? -1 : 1)),
+      map(albums => albums.slice(start, end)),
+    );
   }
 
   search(word: string): Album[] {
