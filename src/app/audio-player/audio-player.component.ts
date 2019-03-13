@@ -25,10 +25,11 @@ export class AudioPlayerComponent implements OnInit {
       switchMap((album) => {
         if (album.status === 'on') {
           this.reset(false); // option true or false pour stopper le player
-          const interval$ = interval(10);
+          const interval$ = interval(10); // interval Observable
 
           this.totalSong = Math.floor(album.duration / 120);
 
+          // return observable
           return interval$.pipe(
             takeUntil(this.aS.destroy$), // stop l'observable avec un Subject qui envoi true
             take(album.duration),
@@ -38,7 +39,6 @@ export class AudioPlayerComponent implements OnInit {
         } else {
           this.showplayer = false;
           this.aS.switchOff(album);
-
         }
       })
     );
@@ -51,6 +51,7 @@ export class AudioPlayerComponent implements OnInit {
     });
   }
 
+  // bouton sous le player visuel dans le template si cliqué alors je lance le subject à true + le reset classique
   stop() {
     this.reset(true);
   }

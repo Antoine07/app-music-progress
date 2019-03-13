@@ -14,16 +14,16 @@ export class AppComponent {
   seconds: number = 0;
   start: number = 0;
   isStop: boolean = false;
+  // Subject
   destroy$: Subject<boolean> = new Subject<boolean>();
-  
 
   constructor() {
     this.startTimer();
   }
 
   stopTimer() {
-    // this.subInterval$.unsubscribe();
-    this.destroy$.next(true);
+    // this.subInterval$.unsubscribe(); // ça marche bien également
+    this.destroy$.next(true); // Observer next envoi le true à l'observable
     this.isStop = !this.isStop;
   }
 
@@ -37,12 +37,11 @@ export class AppComponent {
     // Création d'un observable
     // pipe on applique le traitement dans le service avant réception des doliprames.
     const interval$ = interval(1000).pipe(
-      takeUntil(this.destroy$),
+      takeUntil(this.destroy$), // permettre de stopper l'observable interval
       map(seconds => this.start + seconds),
       map(seconds => { this.seconds = seconds; return seconds; }),
       map(seconds => {
         // logique/algo
-
         let hours = Math.floor(seconds / 3600);
         let minutes = Math.floor(seconds / 60) % 60;
         seconds = seconds % 60;
