@@ -7,11 +7,13 @@ import { AuthService } from './auth.service';
 })
 export class GuardService implements CanActivate {
 
-  constructor(private aS: AuthService, private router: Router) { }
+  constructor(private authS: AuthService, private router: Router) { }
 
   canActivate(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): any | boolean {
+
+    this.authS.testAuth();
 
     // redirection vers la page albums (component) avec un message d'erreur
     this.router.navigate(['/albums'], {

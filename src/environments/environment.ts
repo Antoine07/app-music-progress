@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  numberPage : 2
+  numberPage : 2,
 };
 
 /*
