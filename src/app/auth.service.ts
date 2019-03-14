@@ -3,18 +3,29 @@ import * as firebase from 'firebase/app';
 import 'firebase/auth';
 
 import { environment } from '../environments/environment.dev';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-  constructor() { }
+  private _authState: boolean | null;
+
+  // event si on change le status
+  constructor(private router: Router) {
+    firebase.auth().onAuthStateChanged(user => {
+      this._authState = user ? true : null;
+    });
+  }
+
+  authenticated(): boolean | null { return this._authState; }
 
   auth(email: string, password: string): Promise<any> {
     return firebase.auth().signInWithEmailAndPassword(email, password);
   }
 
+  // Pour tester l'authentification
   testAuth() {
     firebase.auth().signInWithEmailAndPassword(environment.login, environment.password)
       .catch(function (error) {

@@ -7,20 +7,24 @@ import { AuthService } from './auth.service';
 })
 export class GuardService implements CanActivate {
 
-  constructor(private authS: AuthService, private router: Router) { }
+  constructor(private authS: AuthService, private router: Router) {
+
+  }
 
   canActivate(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): any | boolean {
+    // this.authS.testAuth(); // test de connexion
 
-    this.authS.testAuth();
+    if (this.authS.authenticated() === true) return true;
+    
+    // console.log('no auth');
 
-    // redirection vers la page albums (component) avec un message d'erreur
-    this.router.navigate(['/albums'], {
-      queryParams: { messageError: 'Error authentification' }
-    });
+    this.router.navigate(
+      ['/login'],
+      { queryParams: { messageError: 'Error authentification' } }
+    );
 
     return false;
-
   }
 }
