@@ -13,6 +13,20 @@ import { AlbumDescriptionComponent } from './album-description/album-description
 import { LoginComponent } from './login/login.component';
 import { AudioPlayerComponent } from './audio-player/audio-player.component';
 import { HttpClientModule } from '@angular/common/http';
+import { DashboardComponent } from './dashboard/dashboard.component';
+
+import * as firebase from 'firebase';
+
+const config = {
+  apiKey: "AIzaSyBVvB8IZr3bhMuHZc9yKQ3Ffa8Mwd0n3ho",
+  authDomain: "music-progress-8303e.firebaseapp.com",
+  databaseURL: "https://music-progress-8303e.firebaseio.com",
+  projectId: "music-progress-8303e",
+  storageBucket: "music-progress-8303e.appspot.com",
+  messagingSenderId: "381957377535"
+};
+
+firebase.initializeApp(config);
 
 @NgModule({
   declarations: [
@@ -24,6 +38,7 @@ import { HttpClientModule } from '@angular/common/http';
     AlbumDescriptionComponent,
     LoginComponent,
     AudioPlayerComponent,
+    DashboardComponent,
   ],
   imports: [
     BrowserModule,
