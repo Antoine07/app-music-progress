@@ -3,8 +3,10 @@ import { Routes, RouterModule } from '@angular/router';
 import { AlbumsComponent } from './albums/albums.component';
 import { AlbumDescriptionComponent } from './album-description/album-description.component';
 import { LoginComponent } from './login/login.component';
-import { DashboardComponent } from './dashboard/dashboard.component';
 import { GuardService } from './guard.service';
+
+// dans le module admin.module
+import { AlbumComponent } from './admin/album/album.component';
 
 const routes: Routes = [
   {
@@ -28,8 +30,8 @@ const routes: Routes = [
     // en deuxième paramètre le canActivate qui vérifie l'authentification
     // à l'aide d'un component LoginComponent on vérifie que l'utilisateur a bien son login/passwor ok (todo...)
     // puis le canActivate retournera Ok (true) et on pourra suivre cette route
-    path: 'dashboard', canActivate: [GuardService],
-    component: DashboardComponent
+    path: 'admin', canActivate: [GuardService],
+    component: AlbumComponent
   }
 ];
 

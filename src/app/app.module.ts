@@ -7,7 +7,6 @@ import { AlbumDetailsComponent } from './album-details/album-details.component';
 import { FormsModule } from "@angular/forms";
 import { SearchComponent } from './search/search.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { PaginateComponent } from './paginate/paginate.component';
 import { AppRoutingModule } from './app-routing.module';
 import { AlbumDescriptionComponent } from './album-description/album-description.component';
 import { LoginComponent } from './login/login.component';
@@ -16,6 +15,9 @@ import { HttpClientModule } from '@angular/common/http';
 import { DashboardComponent } from './dashboard/dashboard.component';
 
 import * as firebase from 'firebase';
+
+import { AdminModule } from './admin/admin.module';
+import { ShareModule } from './share/share.module';
 
 const config = {
   apiKey: "AIzaSyBVvB8IZr3bhMuHZc9yKQ3Ffa8Mwd0n3ho",
@@ -34,7 +36,6 @@ firebase.initializeApp(config);
     AlbumsComponent,
     AlbumDetailsComponent,
     SearchComponent,
-    PaginateComponent,
     AlbumDescriptionComponent,
     LoginComponent,
     AudioPlayerComponent,
@@ -46,8 +47,10 @@ firebase.initializeApp(config);
     BrowserAnimationsModule,
     AppRoutingModule,
     HttpClientModule,
+    AdminModule,
+    ShareModule, // les components, directives, services partagés
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
 export class AppModule { }

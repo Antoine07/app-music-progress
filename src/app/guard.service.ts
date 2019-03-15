@@ -6,9 +6,7 @@ import { AuthService } from './auth.service';
   providedIn: 'root'
 })
 export class GuardService implements CanActivate {
-
   constructor(private authS: AuthService, private router: Router) {
-
   }
 
   canActivate(
@@ -16,9 +14,7 @@ export class GuardService implements CanActivate {
     state: RouterStateSnapshot): any | boolean {
     // this.authS.testAuth(); // test de connexion
 
-    if (this.authS.authenticated() === true) return true;
-    
-    // console.log('no auth');
+    if (this.authS.authenticated() == true) return true;
 
     this.router.navigate(
       ['/login'],

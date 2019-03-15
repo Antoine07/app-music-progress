@@ -7,15 +7,27 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
             <ul class="navbar-nav mr-auto">
-                <li class="nav-item active">
-                    <a class="nav-link" routerLink="/albums" routerLinkActive="active">Home
+                <li class="nav-item">
+                    <a class="nav-link" routerLink="/albums" routerLinkActive="active">Accueil
                     </a>
                 </li>
-                <li class="nav-item active">
+                <li class="nav-item" *ngIf="authS.authenticated()==false; else elseAuth">
                     <a class="nav-link" routerLink="/login" routerLinkActive="active">
                         Se connecter
                     </a>
                 </li>
+                <ng-template #elseAuth>
+                    <li class="nav-item">
+                        <a class="nav-link" routerLink="/admin" routerLinkActive="active">
+                            Admin
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link logout" (click)="authS.logout()">
+                            Se déconnecter
+                        </a>
+                    </li>
+                </ng-template>
             </ul>
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item">

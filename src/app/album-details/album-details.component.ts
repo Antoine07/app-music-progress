@@ -26,8 +26,8 @@ import { trigger, state, style, transition, animate } from '@angular/animations'
 
 export class AlbumDetailsComponent implements OnInit {
 
-  @Input() album:  Album; 
-  @Output() onPlay: EventEmitter<Album> = new EventEmitter();
+  @Input() album:  Album; // entrée du parent vers l'enfant
+  @Output() onPlay: EventEmitter<Album> = new EventEmitter(); // la sortie de l'enfant vers le parent
 
   albumLists: List[] = ALBUM_LISTS; // récupération de la liste des chasons
   songs: Array<string> = [];

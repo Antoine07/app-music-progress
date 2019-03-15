@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { interval, Subject } from 'rxjs'; // Observable boite de doliprane
 import { map, takeUntil } from 'rxjs/operators'; // fonction permettant de modifier en amont les dolipranes
+import { AuthService } from './auth.service';
 
 @Component({
   selector: 'app-root',
@@ -17,7 +18,7 @@ export class AppComponent {
   // Subject
   destroy$: Subject<boolean> = new Subject<boolean>();
 
-  constructor() {
+  constructor(public authS: AuthService) {
     this.startTimer();
   }
 
@@ -57,4 +58,5 @@ export class AppComponent {
       this.timer = time
     });
   }
+
 }

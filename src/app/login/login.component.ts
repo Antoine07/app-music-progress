@@ -22,7 +22,7 @@ export class LoginComponent implements OnInit {
     // console.log(form); // vérifier le contenu du formulaire
     this.authS.auth(form.value['email'], form.value['password']).then(
       () => {
-        this.router.navigate(['/dashboard'], { queryParams: { message: 'success' } })
+        this.router.navigate(['/admin'], { queryParams: { message: 'success' } })
       }
     ).catch(
       error => this.messageError = 'Error login'

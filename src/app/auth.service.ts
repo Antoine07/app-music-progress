@@ -10,16 +10,16 @@ import { Router } from '@angular/router';
 })
 export class AuthService {
 
-  private _authState: boolean | null;
+  private _authState: boolean;
 
   // event si on change le status
   constructor(private router: Router) {
     firebase.auth().onAuthStateChanged(user => {
-      this._authState = user ? true : null;
+      this._authState = user ? true : false;
     });
   }
 
-  authenticated(): boolean | null { return this._authState; }
+  authenticated(): boolean { return this._authState; }
 
   auth(email: string, password: string): Promise<any> {
     return firebase.auth().signInWithEmailAndPassword(email, password);
@@ -39,5 +39,13 @@ export class AuthService {
         }
         console.log(error);
       }).then(status => console.log(status));
+  }
+
+  logout() {
+    return firebase.auth().signOut().then(
+      () => {
+        this.router.navigate(['/albums'], { queryParams: { message: 'Success logout !' } })
+      }
+    );
   }
 }
