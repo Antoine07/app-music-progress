@@ -6,7 +6,12 @@ import { environment } from '../environments/environment';
 import { Subject, Observable } from 'rxjs';
 // HttpClient <=> un service 
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { map } from 'rxjs/operators';
+import { map, switchMap, mergeMap } from 'rxjs/operators';
+
+import * as firebase from 'firebase/app';
+
+// library JS qui permet de traiter facilement un literal pb avec Firebase retour des données {...}
+import * as _ from 'lodash';
 
 // options pour la requête
 const httpOptions = {
@@ -26,7 +31,7 @@ export class AlbumService {
   // url de la base de données
   private albumsUrl = 'https://music-progress-8303e.firebaseio.com';
 
-
+  // https://music-progress-8303e.firebaseio.com/-La0mWqjbenmvEnnCmzL/.json
   sendCurrentNumberPage = new Subject<number>();
   subjectAlbum = new Subject<Album>();
   destroy$: Subject<boolean> = new Subject<boolean>();
@@ -43,6 +48,7 @@ export class AlbumService {
 
     // aucune souscription elle se fera dans les components Albums, ...
     return this.http.get<Album[]>(this.albumsUrl + '/albums.json').pipe(
+      map(albums => _.values(albums)),
       map(albums => albums.sort((a, b) => compare(a.duration, b.duration) ? -1 : 1)),
     );
 
@@ -68,6 +74,7 @@ export class AlbumService {
   paginate(start: number, end: number, compare = (a, b) => a > b): Observable<Album[]> {
 
     return this.http.get<Album[]>(this.albumsUrl + '/albums.json').pipe(
+      map(albums => _.values(albums)), // loadash comme hack pour récupérer les données dans un Array
       map(albums => albums.sort((a, b) => compare(a.duration, b.duration) ? -1 : 1)),
       map(albums => albums.slice(start, end)),
     );
@@ -105,4 +112,31 @@ export class AlbumService {
     album.status = 'off';
     this.subjectAlbum.unsubscribe();
   }
+
+  addAlbum(album: Album): Observable<any> {
+
+    // ajoute d'un album dans la liste des albums dans firebase
+    return this.http.post<void>(this.albumsUrl + '/albums/.json', album);
+  }
+
+  // mettre à jour un album avec sa référence dans firebase <=> key
+  updateAlbum(ref: string, album: Album): Observable<any> {
+    return this.http.put<void>(this.albumsUrl + `/albums/${ref}/.json`, album);
+  }
+
+  updateCount(count: number): Observable<any> {
+    return this.http.put<void>(this.albumsUrl + `/count/.json`, count);
+  }
+
+  // upload image
+  uploadFile(file: File) {
+
+    const randomId = Math.random().toString(36).substring(2);
+    const ref = firebase.app().storage("gs://music-60f33.appspot.com").ref();
+    const imagesRef = ref.child('images');
+
+    return imagesRef.child(randomId + '.png').put(file);
+
+  }
+
 }

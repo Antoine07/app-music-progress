@@ -18,7 +18,13 @@ export class AlbumsComponent implements OnInit {
   pos: number;
   status: string = null; // pour gérer l'affichage des caractères [play] 
 
-  constructor(private ablumService: AlbumService) { }
+  constructor(private ablumService: AlbumService) { 
+
+    this.ablumService.getAlbums().subscribe(
+      a => console.log(a)
+    )
+
+  }
 
   ngOnInit() {
     // récupérer les albums depuis firebase sans la pagination !! à l'aide du service et les afficher dans le template
